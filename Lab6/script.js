@@ -39,7 +39,6 @@ function start() {
       document.removeEventListener("mousemove", ustaw_kamere_mysz, false);
     }
   }
-  //****************************************************************
 
   //Inicialize the GL contex
   gl = canvas.getContext("webgl2");
@@ -55,50 +54,55 @@ function start() {
   console.log("GLSL version: " + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
   console.log("Vendor: " + gl.getParameter(gl.VENDOR));
 
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  gl.viewport(0, 0, canvas.width, canvas.height);
+
   const vs = gl.createShader(gl.VERTEX_SHADER);
   const fs = gl.createShader(gl.FRAGMENT_SHADER);
   const program = gl.createProgram();
 
-  const vsSource = `#version 300 es
-		precision highp float;
-		in vec3 position;
-		in vec3 color;
+  const vsSource = `#version 300 es  
+            precision highp float;
 
-		uniform mat4 model;
-		uniform mat4 view;
-		uniform mat4 proj;
+            in vec3 position;
+            in vec3 color;  
+            in vec2 aTexCoord;
 
-		out vec3 Color;
+                uniform mat4 model;
+                uniform mat4 view;  
+                uniform mat4 proj;  
+               
+                out vec3 Color;
+                out vec2 TexCoord;
 
-		in vec2 aTexCoord;
-		out vec2 TexCoord;
+            void main(void)  
+            {
+                Color = color;
+                TexCoord = aTexCoord;
 
-		void main(void)
-		{
-			TexCoord = aTexCoord;
-			Color = color;
-			gl_Position = proj * view * model * vec4(position, 1.0);
-		}
-		`;
+                gl_Position = proj * view * model * vec4(position,1.0);
+            }`;
 
   const fsSource = `#version 300 es
-		precision highp float;
-		in vec3 Color; 
-		 
-		in vec2 TexCoord;
+          precision highp float;
 
-		uniform sampler2D texture1;
+          in vec3 Color;
+          in vec2 TexCoord;
 
-		uniform sampler2D texture2;
+          uniform sampler2D texture1;
+          uniform sampler2D texture2;
 
-		out vec4 frag_color;
-		void main(void)
-		{
-			frag_color = texture(texture1, TexCoord);
-			//frag_color *= texture(texture2, TexCoord);
-			//frag_color *= vec4(Color, 1.0);
-			//frag_color = vec4(1.0, 0.5, 0.25, 1.0);
-		}`;
+          out vec4 frag_color;
+
+          void main(void)
+
+        {
+              frag_color = texture(texture1, TexCoord);
+              //frag_color = vec4(Color,1.0);
+              //frag_color = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.5);
+
+        }`;
 
   //compilation vs
   gl.shaderSource(vs, vsSource);
@@ -127,22 +131,44 @@ function start() {
   }
 
   gl.useProgram(program);
+  var vertices = [
+    -0.5, -0.5, -0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, -0.5, -0.5, 0.0, 0.0, 1.0,
+    1.0, 0.0, 0.5, 0.5, -0.5, 0.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, -0.5, 0.0, 1.0,
+    1.0, 1.0, 1.0, -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 1.0, -0.5, -0.5, -0.5,
+    0.0, 0.0, 0.0, 0.0, 0.0,
+
+    -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, -0.5, 0.5, 1.0, 0.0, 1.0,
+    1.0, 0.0, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 1.0,
+    1.0, 1.0, 1.0, -0.5, 0.5, 0.5, 0.0, 1.0, 0.0, 0.0, 1.0, -0.5, -0.5, 0.5,
+    0.0, 0.0, 0.0, 0.0, 0.0,
+
+    -0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0, -0.5, 0.5, -0.5, 1.0, 1.0, 1.0,
+    1.0, 0.0, -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 1.0, -0.5, -0.5, -0.5, 0.0,
+    1.0, 0.0, 1.0, 1.0, -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, -0.5, 0.5,
+    0.5, 1.0, 0.0, 1.0, 0.0, 0.0,
+
+    0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0, 0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 1.0,
+    0.0, 0.5, -0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 1.0, 0.5, -0.5, -0.5, 0.0, 1.0,
+    0.0, 1.0, 1.0, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5, 0.5, 0.5, 1.0,
+    0.0, 1.0, 0.0, 0.0,
+
+    -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.5, -0.5, -0.5, 1.0, 1.0, 1.0,
+    1.0, 0.0, 0.5, -0.5, 0.5, 1.0, 0.0, 1.0, 1.0, 1.0, 0.5, -0.5, 0.5, 1.0, 0.0,
+    1.0, 1.0, 1.0, -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, -0.5, -0.5, -0.5,
+    0.0, 1.0, 0.0, 0.0, 0.0,
+
+    -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.5, 0.5, -0.5, 1.0, 1.0, 1.0,
+    1.0, 0.0, 0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 0.0,
+    1.0, 1.0, 1.0, -0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, -0.5, 0.5, -0.5,
+    0.0, 1.0, 0.0, 0.0, 0.0,
+  ];
 
   //macierz model ////////////////////////////////////////////
   const model = mat4.create();
-  //    const kat_obrotu = -25 * Math.PI / 180; // in radians
   const kat_obrotu = (0 * Math.PI) / 180;
   mat4.rotate(model, model, kat_obrotu, [0, 0, 1]);
-
   let uniModel = gl.getUniformLocation(program, "model");
   gl.uniformMatrix4fv(uniModel, false, model);
-
-  //macierz widoku//////////////////////////////////////////////
-  const view = mat4.create();
-  mat4.lookAt(view, [0, 0, 3], [0, 0, -1], [0, 1, 0]);
-
-  let uniView = gl.getUniformLocation(program, "view");
-  gl.uniformMatrix4fv(uniView, false, view);
 
   //macierz projekcji/////////////////////////////////////////////
   const proj = mat4.create();
@@ -153,18 +179,15 @@ function start() {
     0.1,
     500.0
   );
-
   let uniProj = gl.getUniformLocation(program, "proj");
   gl.uniformMatrix4fv(uniProj, false, proj);
-  /////////////////////////////////////////////////////////////////
 
-  //let n_draw = 0;
+  //macierz widoku//////////////////////////////////////////////
+  const view = mat4.create();
+  mat4.lookAt(view, [0, 0, 3], [0, 0, -1], [0, 1, 0]);
+  let uniView = gl.getUniformLocation(program, "view");
+  gl.uniformMatrix4fv(uniView, false, view);
 
-  // buffer ////////////////////////////////////////////
-
-  /*const buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);*/
-  //gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
   const position = gl.getAttribLocation(program, "position");
   gl.enableVertexAttribArray(position);
   gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
@@ -193,14 +216,11 @@ function start() {
   kostka();
   daneWierzcholkowe();
 
-  // camera ////////////////////////////////////////
   let cameraFront_tmp = glm.vec3(1, 1, 1);
   let cameraPos = glm.vec3(0, 0, 3);
   let cameraFront = glm.vec3(0, 0, -1);
   let cameraUp = glm.vec3(0, 1, 0);
-  let obrot = 0.0;
-
-  //	draw	***************************************
+  
   let licznik = 0;
   const fpsElem = document.querySelector("#fps");
   let startTime = 0;
@@ -210,13 +230,10 @@ function start() {
   let tryb = 3;
   let rozstaw = -0.05;
 
-  //kostka();
-
   function draw() {
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    gl.viewport(0, 0, canvas.width, canvas.height); //cały obszar ekranu
     gl.activeTexture(gl.TEXTURE0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer1);
@@ -244,126 +261,59 @@ function start() {
     gl.bindTexture(gl.TEXTURE_2D, texture5);
     gl.drawArrays(gl.TRIANGLES, 0, points5);
 
-    ustaw_kamere();
-
-    /*
-
-		gl.viewport(0, 0, canvas.width, canvas.height); //cały obszar ekranu
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, texture1);
-		gl.drawArrays(prymityw, 0, points);
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);*/
-
-    /*switch (tryb){
-			case 1:{
-				gl.viewport(0, 0, canvas.width, canvas.height); //cały obszar ekranu
-				StereoProjection(-6, 6, -4.8, 4.8, 12.99, -100, 0, 13, rozstaw); //projekcja dla lewego okagl. 
-				wiecej niz -100
-				gl.colorMask(true,false,false,false);//czerwony filtr
-				
-				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture1);
-				gl.drawArrays(prymityw, 0, 12);
-				gl.bindTexture(gl.TEXTURE_2D, texture2);         
-				gl.drawArrays(prymityw, 12, 24);
-
-				//gl.clear(gl.COLOR_BUFFER_BIT);
-
-				StereoProjection(-6, 6, -4.8, 4.8, 12.99, -100, 0, 13, rozstaw*-1); //projekcja dla prawego oka
-				gl.colorMask(false,false,true,false);//niebieski filtr
-				
-				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture1);
-				gl.drawArrays(prymityw, 0, 12);
-				gl.bindTexture(gl.TEXTURE_2D, texture2);         
-				gl.drawArrays(prymityw, 12, 24);
-
-				gl.colorMask(true,true,true,true);
-
-				break;
-
-			}
-
-			case 2:{
-
-				gl.viewport(0, 0, canvas.width/2, canvas.height); //cały obszar ekranu
-				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture1);
-				gl.drawArrays(prymityw, 0, 12);
-				gl.bindTexture(gl.TEXTURE_2D, texture2);         
-				gl.drawArrays(prymityw, 12, 24);
-
-				gl.viewport((canvas.width/2)+1, 0, canvas.width/2, canvas.height); //cały obszar ekranu
-				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture1);
-				gl.drawArrays(prymityw, 0, 12);
-				gl.bindTexture(gl.TEXTURE_2D, texture2);         
-				gl.drawArrays(prymityw, 12, 24);
-
-				break;
-			}
-
-			case 3:{
-				gl.viewport(0, 0, canvas.width, canvas.height); //cały obszar ekranu
-				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texture1);
-				gl.drawArrays(prymityw, 0, 12);
-				gl.bindTexture(gl.TEXTURE_2D, texture2);         
-				gl.drawArrays(prymityw, 12, 24);
-
-				break;
-			}
-		}*/
-
-    //gl.drawArrays(prymityw, 24, 36);
+    setCamera();
 
     elapsedTime = performance.now() - startTime;
     startTime = performance.now();
     licznik++;
     let fFps = 1000 / elapsedTime;
 
-    // ograniczenie częstotliwości odświeżania napisu do ok 1/s
     if (licznik > fFps) {
       fpsElem.textContent = fFps.toFixed(1);
       licznik = 0;
     }
-
-    //ograniczenie co ile ma zostać wywołana funkcja
     setTimeout(() => {
       requestAnimationFrame(draw);
     }, 1000 / 60);
-    //window.requestAnimationFrame(draw);
   }
 
   window.requestAnimationFrame(draw);
 
-  // dane wierzchołkowe -------------------------------------------------------------------------
-
+  // 
   function daneWierzcholkowe() {
-    const positionAttrib = gl.getAttribLocation(program, "position");
-    gl.enableVertexAttribArray(positionAttrib);
-    gl.vertexAttribPointer(positionAttrib, 3, gl.FLOAT, false, 8 * 4, 0);
+    const position = gl.getAttribLocation(program, "position");
+    gl.enableVertexAttribArray(position);
+    gl.vertexAttribPointer(position, 3, gl.FLOAT, false, 8 * 4, 0);
 
-    const colorAttrib = gl.getAttribLocation(program, "color");
-    gl.enableVertexAttribArray(colorAttrib);
-    gl.vertexAttribPointer(colorAttrib, 3, gl.FLOAT, false, 8 * 4, 3 * 4);
+    const color = gl.getAttribLocation(program, "color");
+    gl.enableVertexAttribArray(color);
+    gl.vertexAttribPointer(color, 3, gl.FLOAT, false, 8 * 4, 3 * 4);
 
     const texCoord = gl.getAttribLocation(program, "aTexCoord");
     gl.enableVertexAttribArray(texCoord);
     gl.vertexAttribPointer(texCoord, 2, gl.FLOAT, false, 8 * 4, 6 * 4);
   }
-  //-----------------------------------------------------------------------------------------------
 
-  // Add the event listeners for mousedown, mousemove, and mouseup
+  
+  `function draw() {  
+    setCamera();
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);  
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);  
+    gl.drawArrays(gl.TRIANGLES, 0, 36);  
+    window.requestAnimationFrame(draw);
+  }
+
+  window.requestAnimationFrame(draw);`;
+
+
+  // Event listener for mouse move
   window.addEventListener("mousedown", (e) => {
     x = e.offsetX;
     y = e.offsetY;
-    /*alert("x ="+x);
-	alert("y ="+y);*/
   });
 
-  // Add the event listeners for keydown, keyup
+  // Event listener for key up and down
   window.addEventListener(
     "keydown",
     function (event) {
@@ -414,46 +364,49 @@ function start() {
   window.onkeydown = function (e) {
     pressedKey[e.keyCode] = true;
   };
-  function ustaw_kamere() {
+  
+  function setCamera() {
     let cameraSpeed = 0.5;
-    if (pressedKey["38"]) {
-      //Up
+    // let cameraSpeed = 0.002 * elapsedTime;
+    if (pressedKey["38"] === true) {
+      // up
       cameraPos.x += cameraSpeed * cameraFront.x;
       cameraPos.y += cameraSpeed * cameraFront.y;
       cameraPos.z += cameraSpeed * cameraFront.z;
-    }
-    if (pressedKey["37"]) {
-      //left
+    } else if (pressedKey["37"] === true) {
+      // left
+      // rotation -= cameraSpeed;
+      // cameraFront.x = Math.sin(rotation);
+      // cameraFront.z = -Math.cos(rotation);
       let cameraPos_tmp = glm.normalize(glm.cross(cameraFront, cameraUp));
       cameraPos.x -= cameraPos_tmp.x * cameraSpeed;
       cameraPos.y -= cameraPos_tmp.y * cameraSpeed;
-      cameraPos.z -= cameraPos_tmp.z * cameraSpeed;
-
-      //obrot
-      /*obrot -= cameraSpeed;
-			cameraFront.x = Math.sin(obrot);
-			cameraFront.z = -Math.cos(obrot);*/
-    }
-    if (pressedKey["39"]) {
-      // Right
+    } else if (pressedKey["39"] === true) {
+      // right
+      // rotation += cameraSpeed;
+      // cameraFront.x = Math.sin(rotation);
+      // cameraFront.z = -Math.cos(rotation);
       let cameraPos_tmp = glm.normalize(glm.cross(cameraFront, cameraUp));
       cameraPos.x += cameraPos_tmp.x * cameraSpeed;
       cameraPos.y += cameraPos_tmp.y * cameraSpeed;
       cameraPos.z += cameraPos_tmp.z * cameraSpeed;
-
-      //obrot
-      /*obrot += cameraSpeed;
-			cameraFront.x = Math.sin(obrot);
-			cameraFront.z = -Math.cos(obrot);*/
-    }
-    if (pressedKey["40"]) {
-      // Down
+    } else if (pressedKey["40"] === true) {
+      // down
       cameraPos.x -= cameraSpeed * cameraFront.x;
       cameraPos.y -= cameraSpeed * cameraFront.y;
       cameraPos.z -= cameraSpeed * cameraFront.z;
+    } else if (pressedKey["27"] === true) {
+      if (confirm("Want to leave?")) {
+        close();
+      }
+    } else if (pressedKey["49"] == true) {
+      mode = 0;
+    } else if (pressedKey["50"] == true) {
+      mode = 1;
+    } else if (pressedKey["51"] == true) {
+      mode = 2;
     }
 
-    //wyślij macierz do karty
     cameraFront_tmp.x = cameraPos.x + cameraFront.x;
     cameraFront_tmp.y = cameraPos.y + cameraFront.y;
     cameraFront_tmp.z = cameraPos.z + cameraFront.z;
@@ -474,24 +427,32 @@ function start() {
       -0.5, -0.5, -0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, -0.5, -0.5, 0.0, 0.0, 1.0,
       1.0, 0.0, 0.5, 0.5, -0.5, 0.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, -0.5, 0.0,
       1.0, 1.0, 1.0, 1.0, -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 1.0, -0.5, -0.5,
-      -0.5, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0,
-      0.5, -0.5, 0.5, 1.0, 0.0, 1.0, 1.0, 0.0, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0,
-      1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, -0.5, 0.5, 0.5, 0.0,
-      1.0, 0.0, 0.0, 1.0, -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5, 0.5,
-      0.5, 1.0, 0.0, 1.0, 0.0, 0.0, -0.5, 0.5, -0.5, 1.0, 1.0, 1.0, 1.0, 0.0,
-      -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 1.0, -0.5, -0.5, -0.5, 0.0, 1.0,
-      0.0, 1.0, 1.0, -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, -0.5, 0.5, 0.5,
-      1.0, 0.0, 1.0, 0.0, 0.0, 0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0, 0.5, 0.5,
-      -0.5, 1.0, 1.0, 1.0, 1.0, 0.0, 0.5, -0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 1.0,
-      0.5, -0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 1.0, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0,
-      0.0, 1.0, 0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0, -0.5, -0.5, -0.5, 0.0,
-      1.0, 0.0, 0.0, 0.0, 0.5, -0.5, -0.5, 1.0, 1.0, 1.0, 1.0, 0.0, 0.5, -0.5,
-      0.5, 1.0, 0.0, 1.0, 1.0, 1.0, 0.5, -0.5, 0.5, 1.0, 0.0, 1.0, 1.0, 1.0,
-      -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, -0.5, -0.5, -0.5, 0.0, 1.0, 0.0,
-      0.0, 0.0, -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.5, 0.5, -0.5, 1.0,
-      1.0, 1.0, 1.0, 0.0, 0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5,
-      1.0, 0.0, 1.0, 1.0, 1.0, -0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, -0.5,
-      0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.0,
+      -0.5, 0.0, 0.0, 0.0, 0.0, 0.0,
+
+      -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, -0.5, 0.5, 1.0, 0.0, 1.0,
+      1.0, 0.0, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 1.0,
+      1.0, 1.0, 1.0, -0.5, 0.5, 0.5, 0.0, 1.0, 0.0, 0.0, 1.0, -0.5, -0.5, 0.5,
+      0.0, 0.0, 0.0, 0.0, 0.0,
+
+      -0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0, -0.5, 0.5, -0.5, 1.0, 1.0, 1.0,
+      1.0, 0.0, -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 1.0, -0.5, -0.5, -0.5,
+      0.0, 1.0, 0.0, 1.0, 1.0, -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, -0.5,
+      0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0,
+
+      0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 0.0, 0.0, 0.5, 0.5, -0.5, 1.0, 1.0, 1.0,
+      1.0, 0.0, 0.5, -0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 1.0, 0.5, -0.5, -0.5, 0.0,
+      1.0, 0.0, 1.0, 1.0, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.5, 0.5,
+      0.5, 1.0, 0.0, 1.0, 0.0, 0.0,
+
+      -0.5, -0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.5, -0.5, -0.5, 1.0, 1.0, 1.0,
+      1.0, 0.0, 0.5, -0.5, 0.5, 1.0, 0.0, 1.0, 1.0, 1.0, 0.5, -0.5, 0.5, 1.0,
+      0.0, 1.0, 1.0, 1.0, -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, -0.5, -0.5,
+      -0.5, 0.0, 1.0, 0.0, 0.0, 0.0,
+
+      -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.5, 0.5, -0.5, 1.0, 1.0, 1.0,
+      1.0, 0.0, 0.5, 0.5, 0.5, 1.0, 0.0, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 0.0,
+      1.0, 1.0, 1.0, -0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0, -0.5, 0.5, -0.5,
+      0.0, 1.0, 0.0, 0.0, 0.0,
     ];
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
@@ -506,6 +467,7 @@ function start() {
   function ustaw_kamere_mysz(e) {
     let xoffset = e.movementX;
     let yoffset = e.movementY;
+
     let sensitivity = 0.1;
     let cameraSpeed = 0.005 * elapsedTime;
 
@@ -526,7 +488,10 @@ function start() {
     cameraFront = glm.normalize(front);
   }
 
-  //texture1  ŚCIANY *****************************************************************************
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // texture 1
   const texture1 = gl.createTexture();
   {
     gl.bindTexture(gl.TEXTURE_2D, texture1);
@@ -567,13 +532,11 @@ function start() {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     };
     image.crossOrigin = "";
-
-    // image.src = "https://media.istockphoto.com/id/1437707877/pl/zdj%C4%99cie/zielona-powierzchnia-li%C5%9Bci-abstrakcyjne-t%C5%82o-naturalny-wz%C3%B3r-li%C5%9Bcie-tropikalne-ciemne-li%C5%9Bcie.jpg?s=612x612&w=0&k=20&c=qeqaCP4Rr2n7Ejxc5EOcElU2SHRDAzA1mUUW-sIUtB0="; //cegła
     image.src =
       "https://www.eso.org/public/archives/images/publicationjpg/potw2107a.jpg";
-    // image.src = "https://cdn.pixabay.com/photo/2013/09/22/19/14/brick-wall-185081_960_720.jpg"; //cegła
   }
-  //texture2	PODŁOGA**************************************************************
+
+  // texture 2	
   const texture2 = gl.createTexture();
   {
     gl.bindTexture(gl.TEXTURE_2D, texture2);
@@ -618,8 +581,7 @@ function start() {
       "https://cdn.pixabay.com/photo/2017/02/07/09/02/wood-2045379_1280.jpg"; //podloga
   }
 
-  //texture3 MAŁPA	**************************************************************
-
+  // texture 3
   const texture3 = gl.createTexture();
   {
     gl.bindTexture(gl.TEXTURE_2D, texture3);
@@ -664,8 +626,7 @@ function start() {
       "https://media.istockphoto.com/id/1255687027/pl/zdj%C4%99cie/kamie%C5%84-szlachetny-lub-diamentowa-tekstura-z-bliska.webp?s=2048x2048&w=is&k=20&c=KqHnscipXI7zLaR2LuBUrwKrhcNCZO90hm8nx5nDibs="; //złoto metal
   }
 
-  //texture4	TORUSFERA**************************************************************
-
+  // texture 4
   const texture4 = gl.createTexture();
   {
     gl.bindTexture(gl.TEXTURE_2D, texture4);
@@ -710,8 +671,7 @@ function start() {
       "https://cdn.pixabay.com/photo/2016/11/21/13/29/yellow-1845394_1280.jpg"; //kamień
   }
 
-  //texture5	SFERAA**************************************************************
-
+  // texture 5
   const texture5 = gl.createTexture();
   {
     gl.bindTexture(gl.TEXTURE_2D, texture5);
@@ -752,10 +712,12 @@ function start() {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     };
     image.crossOrigin = "";
-    // image.src = "https://www.eso.org/public/archives/images/publicationjpg/potw2107a.jpg"; //sfera
     image.src =
       "https://cdn.pixabay.com/photo/2013/09/22/19/14/brick-wall-185081_960_720.jpg";
   }
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
   gl.uniform1i(gl.getUniformLocation(program, "texture2"), 1);
