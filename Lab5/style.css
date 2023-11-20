@@ -15,6 +15,10 @@ html, body {
     color: white;
 }
 
+div {
+    color: red;
+}
+
 canvas {
     display: block;
     /* position: absolute;
@@ -51,3 +55,4 @@ input {
     left: 2em;
     top: 4em;
 }
+
