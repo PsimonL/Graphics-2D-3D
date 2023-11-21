@@ -1,0 +1,16 @@
+#X3D V3.3 utf8
+
+# Done
+Shape {
+  appearance Appearance {
+    material Material {
+      diffuseColor 1.0 0.0 0.0  # RGB
+     }
+  }
+  geometry Text {
+    string ["Szymon Rogowski - AGH Kraków"]
+    fontStyle FontStyle {
+      spacing 2.0
+    }
+  }
+}

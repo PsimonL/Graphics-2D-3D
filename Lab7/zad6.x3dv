@@ -1,0 +1,20 @@
+#X3D V3.3 utf8
+ 
+ # Done
+Transform {
+  translation 1 4 -1  
+  rotation 1 0 0 0.4 
+  children [
+    Shape {
+      geometry Cylinder {
+        height 2  
+        radius 1  
+      }
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.4 0.8
+        }
+      }
+    }
+  ]
+}

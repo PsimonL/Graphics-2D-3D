@@ -1,0 +1,20 @@
+#X3D V3.3 utf8
+
+# Done
+Shape {
+    appearance Appearance {
+        texture ImageTexture {
+            url ["sr.jpg"]
+        }
+        textureTransform TextureTransform {
+            center 0 0
+            rotation 0
+            scale 1 1
+            translation 0.3 0.2
+        }
+    }
+    geometry Box {
+        size 3 3 3
+    }
+}
+ 

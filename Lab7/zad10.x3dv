@@ -1,0 +1,17 @@
+#X3D V3.3 utf8
+
+#Done
+    Shape {
+      appearance Appearance {
+        texture MovieTexture {
+          url "movie2.mpeg"
+          loop TRUE
+          speed 0.8
+          repeatS TRUE
+          repeatT TRUE
+        }
+      }
+      geometry Box {
+        size 5 5 5
+      }
+    }

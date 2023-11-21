@@ -1,0 +1,19 @@
+#X3D V3.3 utf8
+
+# Done
+Shape {
+  appearance Appearance {
+    material Material {
+      emissiveColor 0 0 1  
+      transparency 0.6 
+    }
+  }
+
+  geometry Sphere {
+    radius 1
+  }
+  
+  lighting model="PHONG" headlight="true" ambientIntensity="0.5">
+    directionalLight direction="1 -1 0" color="1 1 1" intensity="1.0" />
+  </lighting>
+}

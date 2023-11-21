@@ -1,0 +1,13 @@
+#X3D V3.3 utf8
+
+Shape {
+    appearance Appearance {
+        material Material { }
+    }
+    geometry Text {
+        string [ "AGH w Krakowie " ]
+        fontStyle FontStyle {
+        spacing 2.0
+        }
+    }
+}

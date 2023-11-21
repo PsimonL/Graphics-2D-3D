@@ -1,0 +1,18 @@
+#X3D V3.3 utf8
+
+# Done
+Transform {
+  translation 10 15 25  
+  children [
+    Shape {
+      geometry Sphere {
+        radius 1  
+      }
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.8 0.2 0.4
+        }
+      }
+    }
+  ]
+}
