@@ -4,7 +4,7 @@
     Shape {
       appearance Appearance {
         texture MovieTexture {
-          url "movie2.mpeg"
+          url "movie.mpeg"
           loop TRUE
           speed 0.8
           repeatS TRUE
