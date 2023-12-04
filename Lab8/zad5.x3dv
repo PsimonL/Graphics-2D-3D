@@ -1,0 +1,153 @@
+#X3D V3.3 utf8
+
+Viewpoint {
+    fieldOfView 0.8
+    position 0 -20 0
+    description "Z dołu"
+    jump TRUE
+    orientation 3 0 0 1.6
+}
+
+DirectionalLight {
+    color 1 0 0 
+    intensity 0.5  
+    direction 0 1 1  
+}
+
+Transform { 
+    translation 0 0 0
+    children [
+        DEF Podloga Shape {
+            appearance Appearance {
+                material Material {
+                    emissiveColor 0 1 0
+                    transparency 0.5
+                    specularColor 0 1 1
+                }
+            }
+            geometry Box {
+                size 20 0.5 20  
+            }
+        }
+    ]
+}
+
+Transform {
+    translation -9.75 0.5 0
+    children [
+        DEF Bariera1 Shape {
+            appearance Appearance {
+                material Material {
+                    emissiveColor 0 1 0
+                    transparency 0.5
+                    specularColor 0 1 1
+                }
+            }
+            geometry Box {
+                size 0.5 0.5 20  
+            }
+        }
+    ]
+}
+
+Transform {
+    translation 9.75 0.5 0
+    children [ USE Bariera1 ]
+}
+
+Transform {
+    translation 0 0.5 -9.75
+    children [
+        DEF Bariera2 Shape {
+            appearance Appearance {
+                material Material {
+                    emissiveColor 0 1 0
+                    transparency 0.5
+                    specularColor 0 1 1
+                }
+            }
+            geometry Box {
+                size 20 0.5 0.5  
+            }
+        }
+    ]
+}
+
+Transform {
+    translation 0 0.5 9.75
+    children [ USE Bariera2 ]
+}
+
+
+DEF RandomWallGroup Group {
+    children [
+        Transform {
+            translation -7 0.5 -5
+            children [
+                DEF RandomWall1 Shape {
+                    appearance Appearance {
+                        material Material {
+                            emissiveColor 0 1 0
+                            transparency 0.5
+                            specularColor 0 1 1
+                        }
+                    }
+                    geometry Box {
+                        size 2 0.5 10  
+                    }
+                }
+            ]
+        },
+        Transform {
+            translation -1 0.5 3
+            children [
+                DEF RandomWall2 Shape {
+                    appearance Appearance {
+                        material Material {
+                            emissiveColor 0 1 0
+                            transparency 0.5
+                            specularColor 0 1 1
+                        }
+                    }
+                    geometry Box {
+                        size 2 0.5 14  
+                    }
+                }
+            ]
+        },
+        Transform {
+            translation 3 0.5 -6
+            children [
+                DEF RandomWall3 Shape {
+                    appearance Appearance {
+                        material Material {
+                            emissiveColor 0 1 0
+                            transparency 0.5
+                            specularColor 0 1 1
+                        }
+                    }
+                    geometry Box {
+                        size 2 0.5 8  
+                    }
+                }
+            ]
+        },
+        Transform {
+            translation 7 0.5 4
+            children [
+                DEF RandomWall4 Shape {
+                    appearance Appearance {
+                        material Material {
+                            emissiveColor 0 1 0
+                            transparency 0.5
+                            specularColor 0 1 1
+                        }
+                    }
+                    geometry Box {
+                        size 2 0.5 12  
+                    }
+                }
+            ]
+        }
+    ]
+}

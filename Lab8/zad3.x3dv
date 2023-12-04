@@ -1,0 +1,78 @@
+#X3D V3.3 utf8
+ 
+Transform {
+    translation 0 0 0
+    children [
+        DEF Szescian Shape {
+            appearance Appearance {
+                material Material {
+                    emissiveColor 1 1 0
+                    transparency 0
+                    specularColor 0 1 0
+                }
+            }
+            geometry Box {
+                size 4 4 4 
+            }
+        }
+    ]
+}
+
+Transform {
+   translation 0 0 4 
+   children [ USE Szescian ]
+}
+
+Transform {
+   translation 0 4 4 
+   children [ USE Szescian ]
+}
+
+Transform {
+   translation 0 4 8 
+   children [ USE Szescian ]
+}
+
+Transform {
+   translation 0 4 8 
+   children [ USE Szescian ]
+}
+
+Transform {
+   translation 0 8 8 
+   children [ USE Szescian ]
+}
+
+Transform {
+   translation 0 8 12 
+   children [ USE Szescian ]
+}
+
+Transform {
+   translation 0 12 12 
+   children [ USE Szescian ]
+}
+
+Transform {
+   translation 0 12 16 
+   children [ USE Szescian ]
+}
+
+Transform {
+   translation 0 16 16 
+   children [ USE Szescian ]
+}
+
+Transform {
+   translation 0 16 20 
+   children [ USE Szescian ]
+}
+
+Transform {
+   translation 0 20 20 
+   children [ USE Szescian ]
+}
+Transform {
+   translation 0 20 24 
+   children [ USE Szescian ]
+}

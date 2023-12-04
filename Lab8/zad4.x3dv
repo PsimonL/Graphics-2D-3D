@@ -1,0 +1,41 @@
+#X3D V3.3 utf8
+
+DEF Szescian Shape {
+  appearance Appearance {
+    material Material {
+      emissiveColor 1 1 0
+      transparency 0
+      specularColor 0 1 0
+    }
+  }
+  geometry Box {
+    size 4 4 4
+  }
+}
+
+
+Viewpoint {
+  position 0 0 10
+  orientation 0 0 1 0
+  fieldOfView 0.785398
+  jump TRUE
+  description "Widok z przodu"
+}
+
+
+Viewpoint {
+  fieldOfView 0.785398
+  position 0 -10 0
+  description "Widok z dołu"
+  jump TRUE
+  orientation 1 0 0 1.570796
+}
+
+
+Viewpoint {
+  position -10 0 0
+  orientation 0 1 0 -1.570796
+  fieldOfView 0.785398
+  jump TRUE
+  description "Widok z lewej strony"
+}

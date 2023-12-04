@@ -1,0 +1,18 @@
+#X3D V3.3 utf8
+
+
+SpotLight {
+ambientIntensity 0.8
+color 0 0 1  # Kolor niebieski
+direction 1 0 0  # Kierunek światła - z prawej strony
+intensity 1  # Zwiększona intensywność (można dostosować według potrzeb)
+on TRUE
+}
+
+Shape {
+appearance Appearance {
+    material Material { }
+}
+geometry Sphere { radius 2 }  # Średnica kuli to 4 jednostki
+}
+

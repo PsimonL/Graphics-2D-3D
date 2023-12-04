@@ -1,0 +1,30 @@
+#X3D V3.3 utf8
+ 
+Transform {
+    translation 0 2 -10
+    rotation 1 0 0 0.5
+    children [
+        DEF Szescian Shape {
+            appearance Appearance {
+                material Material {
+                    emissiveColor 1 1 0
+                    transparency 0
+                    specularColor 0 1 0
+                }
+            }
+            geometry Box {
+                size 4 4 4
+            }
+        }
+    ]
+}
+ 
+Transform {
+   translation 0 0 4
+   children [ USE Szescian ]
+}
+ 
+# Transform {
+#    translation 0 4 4
+#    children [ USE Szescian ]
+# }
