@@ -5,7 +5,7 @@ SpotLight {
 ambientIntensity 0.8
 color 0 0 1  # Kolor niebieski
 direction 1 0 0  # Kierunek światła - z prawej strony
-intensity 1  # Zwiększona intensywność (można dostosować według potrzeb)
+intensity 1  
 on TRUE
 }
 
