@@ -1,78 +1,81 @@
 #X3D V3.3 utf8
- 
+
 Transform {
-    translation 0 0 0
+    translation 0 0 0 
     children [
-        DEF Szescian Shape {
+        DEF Podloga Shape {
             appearance Appearance {
-                material Material {
-                    emissiveColor 1 1 0
-                    transparency 0
-                    specularColor 0 1 0
+                texture ImageTexture {
+                    url ["floor.jpg"]
                 }
             }
             geometry Box {
-                size 4 4 4 
+                size 4 0.1 8
             }
         }
     ]
 }
 
 Transform {
-   translation 0 0 4 
-   children [ USE Szescian ]
+    translation 0 0.55 -3.95 
+    children [
+        Shape {
+            appearance Appearance {
+                texture ImageTexture {
+                    url ["walls.jpg"]
+                }
+            }
+            geometry Box {
+                size 4 1 0.1
+            }
+        }
+    ]
 }
 
 Transform {
-   translation 0 4 4 
-   children [ USE Szescian ]
+    translation 1.95 0.55 0
+    children [
+        DEF SideWall Shape {
+            appearance Appearance {
+                texture ImageTexture {
+                    url ["walls.jpg"]
+                }
+            }
+            geometry Box {
+                size 0.1 1 8
+            }
+        }
+    ]
 }
 
 Transform {
-   translation 0 4 8 
-   children [ USE Szescian ]
+    translation -1.95 0.55 0 
+    children [
+        DEF SideWall Shape {
+            appearance Appearance {
+                texture ImageTexture {
+                    url ["walls.jpg"]
+                }
+            }
+            geometry Box {
+                size 0.1 1 8
+            }
+        }
+    ]
 }
 
 Transform {
-   translation 0 4 8 
-   children [ USE Szescian ]
-}
-
-Transform {
-   translation 0 8 8 
-   children [ USE Szescian ]
-}
-
-Transform {
-   translation 0 8 12 
-   children [ USE Szescian ]
-}
-
-Transform {
-   translation 0 12 12 
-   children [ USE Szescian ]
-}
-
-Transform {
-   translation 0 12 16 
-   children [ USE Szescian ]
-}
-
-Transform {
-   translation 0 16 16 
-   children [ USE Szescian ]
-}
-
-Transform {
-   translation 0 16 20 
-   children [ USE Szescian ]
-}
-
-Transform {
-   translation 0 20 20 
-   children [ USE Szescian ]
-}
-Transform {
-   translation 0 20 24 
-   children [ USE Szescian ]
+    translation 5 0.55 5
+    children [
+        Shape {
+            appearance Appearance {
+                texture ImageTexture {
+                    url ["screen.jpg"]
+                }
+            }
+            geometry Box {
+                size 4 1 0.1
+            }
+        }
+    ]
 }

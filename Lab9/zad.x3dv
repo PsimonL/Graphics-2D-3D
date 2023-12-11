@@ -1,0 +1,177 @@
+#X3D V3.3 utf8
+
+Viewpoint {
+    fieldOfView 0.8
+    position -5 2.5 15
+    description "Przód"
+    jump TRUE
+}
+
+DirectionalLight {
+    color 1 0 0
+    intensity 0.5
+    direction 0 10 10
+}
+
+Transform {
+    translation 0 0 0
+    children [
+        DEF Podloga Shape {
+            appearance Appearance {
+                texture ImageTexture {
+                    url ["floor.jpg"]
+                }
+            }
+            geometry Box {
+                size 40 1 80
+            }
+        }
+    ]
+}
+
+Transform {
+    translation 0 5.5 -39.5
+    children [
+        Shape {
+            appearance Appearance {
+                texture ImageTexture {
+                    url ["walls.jpg"]
+                }
+            }
+            geometry Box {
+                size 40 10 1
+            }
+        }
+    ]
+}
+
+Transform {
+    translation 19.5 5.5 0
+    children [
+        DEF SideWall Shape {
+            appearance Appearance {
+                texture ImageTexture {
+                    url ["walls.jpg"]
+                }
+            }
+            geometry Box {
+                size 1 10 80
+            }
+        }
+    ]
+}
+
+Transform {
+    translation -19.5 5.5 0
+    children [
+        DEF SideWall Shape {
+            appearance Appearance {
+                texture ImageTexture {
+                    url ["walls.jpg"]
+                }
+            }
+            geometry Box {
+                size 1 10 80
+            }
+        }
+    ]
+}
+
+Transform {
+    translation 0 1.5 0
+    children [
+        DEF Kloc Shape {
+            appearance Appearance {
+                texture ImageTexture {
+                    url ["seats.png"]
+                }
+            }
+            geometry Box {
+                size 2.5 1.5 2
+            }
+        }
+    ]
+}
+
+Transform {
+    translation -5 1.5 0
+    children [USE Kloc]
+}
+
+Transform {
+    translation 5 1.5 0
+    children [USE Kloc]
+}
+
+Transform {
+    translation -5 1.5 5
+    children [USE Kloc]
+}
+
+Transform {
+    translation 5 1.5 5
+    children [USE Kloc]
+}
+
+Transform {
+    translation 0 1.5 5
+    children [USE Kloc]
+}
+
+Transform {
+    translation -5 1.5 10
+    children [USE Kloc]
+}
+
+Transform {
+    translation 5 1.5 10
+    children [USE Kloc]
+}
+
+Transform {
+    translation 0 1.5 10
+    children [USE Kloc]
+}
+
+Transform {
+    translation -5 1.5 15
+    children [USE Kloc]
+}
+
+Transform {
+    translation 5 1.5 15
+    children [USE Kloc]
+}
+
+Transform {
+    translation 0 1.5 15
+    children [USE Kloc]
+}
+
+Transform {
+    translation 0 4.5 -30
+    children [
+        Shape {
+            appearance Appearance {
+                texture MovieTexture {
+                    description ""
+                    loop TRUE
+                    pauseTime 0
+                    resumeTime 0
+                    speed 1.0
+                    startTime 0
+                    stopTime 0
+                    # url ["movie.mpeg"]
+                    flipVertically FALSE
+                    repeatS TRUE
+                    repeatT TRUE
+                    textureProperties NULL
+                    pitch 1.0
+                }
+            }
+            geometry Box {
+                size 20 9 1
+            }
+        }
+    ]
+}
